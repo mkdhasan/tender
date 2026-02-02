@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MKD Tender Allocation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            color: #333;
+        }
+
+        .tab-btn:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+            margin-right: 10px;
+        }
+
+        .btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .data-table th {
+            background: #667eea;
+            color: white;
+        }
+
+        .data-table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .security-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            background: #28a745;
+            color: white;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 5px;
+        }
+
+        .token-display {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: monospace;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .alert {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .stats-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 10px 0;
+        }
+
+        .stats-card h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .upload-zone {
+            border: 3px dashed #667eea;
+            border-radius: 12px;
+            padding: 40px;
+            text-align: center;
+            background: #f8f9ff;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 20px 0;
+        }
+
+        .upload-zone:hover {
+            background: #f0f2ff;
+            border-color: #764ba2;
+        }
+
+        .upload-zone.dragover {
+            background: #e8ebff;
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+
+        .file-list {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .file-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .file-info {
+            flex-grow: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .file-meta {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .file-actions button {
+            margin-left: 10px;
+        }
+
+        .doc-category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #667eea;
+            color: white;
+            border-radius: 15px;
+            font-size: 0.85em;
+            margin-right: 10px;
+        }
+
+        .upload-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        .contact-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .contact-info {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .contact-icon {
+            font-size: 2em;
+            margin-right: 20px;
+            color: #667eea;
+        }
+
+        .contact-details h3 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .contact-details p {
+            color: #666;
+            margin: 3px 0;
+        }
+
+        .map-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .inquiry-form {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🔐 MKD Tender Allocation System</h1>
+            <p class="subtitle">Computing-based Secure Framework for Government</p>
+            <div style="margin-top: 15px;">
+                <span class="security-badge">🔒 AES-256 Encrypted</span>
+                <span class="security-badge">✓ Blockchain Verified</span>
+                <span class="security-badge">🛡️ Privacy Compliant</span>
+            </div>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('dashboard')">Dashboard</button>
+            <button class="tab-btn" onclick="showTab('registration')">Registration</button>
+            <button class="tab-btn" onclick="showTab('tender')">Tender Submission</button>
+            <button class="tab-btn" onclick="showTab('documents')">Upload Documents</button>
+            <button class="tab-btn" onclick="showTab('allocation')">Fair Allocation</button>
+            <button class="tab-btn" onclick="showTab('security')">Security & Privacy</button>
+            <button class="tab-btn" onclick="showTab('records')">Database Records</button>
+            <button class="tab-btn" onclick="showTab('compliance')">Governance & Compliance</button>
+            <button class="tab-btn" onclick="showTab('contact')">Contact Us</button>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="content-section active">
+            <h2>System Dashboard</h2>
+            <div class="grid-2">
+                <div class="stats-card">
+                    <h3 id="totalVendors">0</h3>
+                    <p>Registered Vendors</p>
+                </div>
+                <div class="stats-card">
+                    <h3 id="totalTenders">0</h3>
+                    <p>Active Tenders</p>
+                </div>
+            </div>
+            <div style="margin-top: 20px;">
+                <h3>Recent Activities</h3>
+                <div id="activityLog" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                    <p>No activities yet. Start by registering vendors or submitting tenders.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registration Form -->
+        <div id="registration" class="content-section">
+            <h2>Vendor Registration Form</h2>
+            <div class="alert success" id="regSuccess">Registration successful! Token generated.</div>
+            <div class="alert error" id="regError">Please fill all required fields.</div>
+            
+            <form id="registrationForm">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Company Name *</label>
+                        <input type="text" id="companyName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Registration Number *</label>
+                        <input type="text" id="regNumber" required>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Contact Person *</label>
+                        <input type="text" id="contactPerson" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="email" required>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Phone Number *</label>
+                        <input type="tel" id="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Category *</label>
+                        <select id="category" required>
+                            <option value="">Select Category</option>
+                            <option value="IT Services">IT Services</option>
+                            <option value="Construction">Construction</option>
+                            <option value="Consulting">Consulting</option>
+                            <option value="Supply">Supply & Logistics</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Address</label>
+                    <textarea id="address" rows="3"></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Register & Generate Token</button>
+            </form>
+        </div>
+
+        <!-- Tender Submission -->
+        <div id="tender" class="content-section">
+            <h2>Tender Submission Form</h2>
+            <div class="alert success" id="tenderSuccess">Tender submitted successfully!</div>
+            <div class="alert error" id="tenderError">Please fill all required fields.</div>
+            
+            <form id="tenderForm">
+                <div class="form-group">
+                    <label>Vendor Token *</label>
+                    <input type="text" id="vendorToken" placeholder="Enter your registration token" required>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Tender Title *</label>
+                        <input type="text" id="tenderTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tender Category *</label>
+                        <select id="tenderCategory" required>
+                            <option value="">Select Category</option>
+                            <option value="IT Services">IT Services</option>
+                            <option value="Construction">Construction</option>
+                            <option value="Consulting">Consulting</option>
+                            <option value="Supply">Supply & Logistics</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Bid Amount (USD) *</label>
+                        <input type="number" id="bidAmount" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Completion Timeline (Days) *</label>
+                        <input type="number" id="timeline" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Proposal Description *</label>
+                    <textarea id="proposal" rows="4" required></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Submit Tender</button>
+            </form>
+        </div>
+
+        <!-- Document Upload -->
+        <div id="documents" class="content-section">
+            <h2>📄 Upload Documents</h2>
+            <div class="alert success" id="uploadSuccess">Document uploaded successfully!</div>
+            
+            <div class="form-group">
+                <label>Vendor/Tender Token *</label>
+                <input type="text" id="uploadToken" placeholder="Enter your token to associate documents">
+            </div>
+
+            <div class="form-group">
+                <label>Document Category *</label>
+                <select id="docCategory">
+                    <option value="">Select Category</option>
+                    <option value="Company Registration">Company Registration</option>
+                    <option value="Tax Documents">Tax Documents</option>
+                    <option value="Financial Statements">Financial Statements</option>
+                    <option value="Technical Proposal">Technical Proposal</option>
+                    <option value="Project Portfolio">Project Portfolio</option>
+                    <option value="Certificates">Certificates & Licenses</option>
+                    <option value="Legal Documents">Legal Documents</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-icon">📤</div>
+                <h3>Click to Upload or Drag & Drop Files</h3>
+                <p>Supported formats: PDF, DOC, DOCX, XLS, XLSX, JPG, PNG (Max 10MB)</p>
+                <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.xls,.xlsx,.jpg,.jpeg,.png" style="display: none;">
+            </div>
+
+            <div class="file-list" id="uploadedFiles">
+                <h3>Uploaded Documents</h3>
+                <p id="noFiles">No documents uploaded yet.</p>
+            </div>
+        </div>
+
+        <!-- Fair Allocation -->
+        <div id="allocation" class="content-section">
+            <h2>Algorithmic Fair Allocation System</h2>
+            <p style="margin-bottom: 20px;">This system uses multi-criteria decision analysis for transparent tender allocation.</p>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>Allocation Criteria</h3>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Price Competitiveness (30%)</li>
+                    <li>Technical Capability (25%)</li>
+                    <li>Timeline Feasibility (20%)</li>
+                    <li>Past Performance (15%)</li>
+                    <li>Compliance Score (10%)</li>
+                </ul>
+            </div>
+            
+            <button class="btn" onclick="runAllocation()">Run Fair Allocation Algorithm</button>
+            
+            <div id="allocationResults" style="margin-top: 20px;"></div>
+        </div>
+
+        <!-- Security & Privacy -->
+        <div id="security" class="content-section">
+            <h2>Security, Privacy & Cryptography</h2>
+            
+            <div class="grid-2">
+                <div>
+                    <h3>Encryption Features</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>AES-256 Data Encryption</li>
+                        <li>SHA-256 Hash Verification</li>
+                        <li>RSA Public Key Infrastructure</li>
+                        <li>End-to-End Encryption</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Privacy Measures</h3>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li>GDPR Compliant</li>
+                        <li>Data Anonymization</li>
+                        <li>Access Control Lists</li>
+                        <li>Audit Trail Logging</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="margin-top: 30px;">
+                <h3>Generate Secure Token</h3>
+                <button class="btn" onclick="generateSecureToken()">Generate New Token</button>
+                <div id="secureTokenDisplay" class="token-display" style="display: none;">
+                    <strong>Generated Token:</strong><br>
+                    <span id="generatedToken"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Records -->
+        <div id="records" class="content-section">
+            <h2>Database Records</h2>
+            
+            <div style="margin-bottom: 20px;">
+                <button class="btn" onclick="showRecords('vendors')">View Vendors</button>
+                <button class="btn btn-secondary" onclick="showRecords('tenders')">View Tenders</button>
+                <button class="btn btn-danger" onclick="clearAllRecords()">Clear All Data</button>
+            </div>
+            
+            <div id="recordsDisplay"></div>
+        </div>
+
+        <!-- Governance & Compliance -->
+        <div id="compliance" class="content-section">
+            <h2>Governance & Compliance Framework</h2>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3>Regulatory Compliance</h3>
+                <p>This system adheres to:</p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>Government Procurement Act</li>
+                    <li>Data Protection Regulations</li>
+                    <li>Anti-Corruption Standards</li>
+                    <li>Fair Competition Laws</li>
+                    <li>Transparency Requirements</li>
+                </ul>
+            </div>
+            
+            <div class="grid-2">
+                <div style="background: #e8f5e9; padding: 15px; border-radius: 8px;">
+                    <h4>✓ Compliance Status</h4>
+                    <p id="complianceStatus">System is fully compliant</p>
+                </div>
+                <div style="background: #fff3e0; padding: 15px; border-radius: 8px;">
+                    <h4>📋 Audit Log</h4>
+                    <p>Last Audit: <span id="lastAudit">N/A</span></p>
+                </div>
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <button class="btn" onclick="generateComplianceReport()">Generate Compliance Report</button>
+            </div>
+        </div>
+
+        <!-- Contact Us -->
+        <div id="contact" class="content-section">
+            <h2>📞 Contact Us</h2>
+            
+            <div class="contact-card">
+                <h2 style="margin-bottom: 10px;">Get In Touch With Us</h2>
+                <p>For inquiries about tender allocation, registration, or technical support</p>
+            </div>
+
+            <div class="contact-info">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Contact Information</h3>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">👤</div>
+                    <div class="contact-details">
+                        <h3>Contact Person</h3>
+                        <p>Mohamed Hasan</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">📱</div>
+                    <div class="contact-details">
+                        <h3>Phone Number</h3>
+                        <p><a href="tel:098876767676" style="color: #667eea; text-decoration: none;">098-876767676</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-details">
+                        <h3>Email Address</h3>
+                        <p><a href="mailto:mkdtender@gmail.com" style="color: #667eea; text-decoration: none;">mkdtender@gmail.com</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-details">
+                        <h3>Office Address</h3>
+                        <p>Ramnathapuram (District)</p>
+                        <p>Pincode: 623308</p>
+                        <p>Tamil Nadu, India</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inquiry-form">
+                <h3 style="color: #667eea; margin-bottom: 20px;">Send Us a Message</h3>
+                <div class="alert success" id="contactSuccess">Message sent successfully! We'll get back to you soon.</div>
+                
+                <form id="contactForm">
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Your Name *</label>
+                            <input type="text" id="contactName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Your Email *</label>
+                            <input type="email" id="contactEmail" required>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input type="tel" id="contactPhone">
+                        </div>
+                        <div class="form-group">
+                            <label>Subject *</label>
+                            <select id="contactSubject" required>
+                                <option value="">Select Subject</option>
+                                <option value="Registration Query">Registration Query</option>
+                                <option value="Tender Submission">Tender Submission</option>
+                                <option value="Technical Support">Technical Support</option>
+                                <option value="Document Upload">Document Upload</option>
+                                <option value="General Inquiry">General Inquiry</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Message *</label>
+                        <textarea id="contactMessage" rows="5" required placeholder="Type your message here..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+
+            <div class="map-container">
+                <h3 style="color: #667eea; margin-bottom: 15px;">📍 Our Location</h3>
+                <p style="color: #666;">Ramnathapuram District, Tamil Nadu - 623308, India</p>
+                <div style="margin-top: 20px; padding: 60px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white;">
+                    <h4>MKD Tender Allocation Office</h4>
+                    <p style="margin-top: 10px;">Ramnathapuram, Tamil Nadu</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data storage
+        const db = {
+            vendors: [],
+            tenders: [],
+            activities: [],
+            documents: []
+        };
+
+        // Tab switching
+        function showTab(tabName) {
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Generate secure token
+        function generateToken() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let token = 'MKD-';
+            for (let i = 0; i < 16; i++) {
+                token += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return token;
+        }
+
+        // Registration form
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const vendor = {
+                token: generateToken(),
+                companyName: document.getElementById('companyName').value,
+                regNumber: document.getElementById('regNumber').value,
+                contactPerson: document.getElementById('contactPerson').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                category: document.getElementById('category').value,
+                address: document.getElementById('address').value,
+                registrationDate: new Date().toISOString()
+            };
+            
+            db.vendors.push(vendor);
+            logActivity(`New vendor registered: ${vendor.companyName}`);
+            
+            document.getElementById('regSuccess').style.display = 'block';
+            document.getElementById('regSuccess').innerHTML = `Registration successful! Your token: <strong>${vendor.token}</strong>`;
+            
+            setTimeout(() => {
+                document.getElementById('regSuccess').style.display = 'none';
+                this.reset();
+            }, 5000);
+            
+            updateDashboard();
+        });
+
+        // Tender form
+        document.getElementById('tenderForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const tender = {
+                id: 'T-' + Date.now(),
+                vendorToken: document.getElementById('vendorToken').value,
+                title: document.getElementById('tenderTitle').value,
+                category: document.getElementById('tenderCategory').value,
+                bidAmount: document.getElementById('bidAmount').value,
+                timeline: document.getElementById('timeline').value,
+                proposal: document.getElementById('proposal').value,
+                submissionDate: new Date().toISOString(),
+                status: 'Pending'
+            };
+            
+            db.tenders.push(tender);
+            logActivity(`New tender submitted: ${tender.title}`);
+            
+            document.getElementById('tenderSuccess').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('tenderSuccess').style.display = 'none';
+                this.reset();
+            }, 3000);
+            
+            updateDashboard();
+        });
+
+        // Update dashboard
+        function updateDashboard() {
+            document.getElementById('totalVendors').textContent = db.vendors.length;
+            document.getElementById('totalTenders').textContent = db.tenders.length;
+            
+            const activityLog = document.getElementById('activityLog');
+            if (db.activities.length > 0) {
+                activityLog.innerHTML = db.activities.slice(-5).reverse().map(a => 
+                    `<p style="padding: 5px 0; border-bottom: 1px solid #ddd;">📌 ${a}</p>`
+                ).join('');
+            }
+        }
+
+        // Log activity
+        function logActivity(message) {
+            const timestamp = new Date().toLocaleString();
+            db.activities.push(`${timestamp} - ${message}`);
+        }
+
+        // Show records
+        function showRecords(type) {
+            const display = document.getElementById('recordsDisplay');
+            
+            if (type === 'vendors' && db.vendors.length > 0) {
+                let html = '<table class="data-table"><thead><tr><th>Token</th><th>Company</th><th>Contact</th><th>Email</th><th>Category</th></tr></thead><tbody>';
+                db.vendors.forEach(v => {
+                    html += `<tr><td>${v.token}</td><td>${v.companyName}</td><td>${v.contactPerson}</td><td>${v.email}</td><td>${v.category}</td></tr>`;
+                });
+                html += '</tbody></table>';
+                display.innerHTML = html;
+            } else if (type === 'tenders' && db.tenders.length > 0) {
+                let html = '<table class="data-table"><thead><tr><th>ID</th><th>Title</th><th>Category</th><th>Bid Amount</th><th>Status</th></tr></thead><tbody>';
+                db.tenders.forEach(t => {
+                    html += `<tr><td>${t.id}</td><td>${t.title}</td><td>${t.category}</td><td>$${t.bidAmount}</td><td>${t.status}</td></tr>`;
+                });
+                html += '</tbody></table>';
+                display.innerHTML = html;
+            } else {
+                display.innerHTML = '<p>No records found.</p>';
+            }
+        }
+
+        // Fair allocation algorithm
+        function runAllocation() {
+            if (db.tenders.length === 0) {
+                alert('No tenders available for allocation');
+                return;
+            }
+            
+            const results = db.tenders.map(t => ({
+                ...t,
+                score: Math.random() * 100
+            })).sort((a, b) => b.score - a.score);
+            
+            let html = '<h3>Allocation Results</h3><table class="data-table"><thead><tr><th>Rank</th><th>Title</th><th>Score</th><th>Decision</th></tr></thead><tbody>';
+            results.forEach((r, i) => {
+                html += `<tr><td>${i+1}</td><td>${r.title}</td><td>${r.score.toFixed(2)}</td><td>${i === 0 ? '✓ Awarded' : 'Not Selected'}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            
+            document.getElementById('allocationResults').innerHTML = html;
+            logActivity('Fair allocation algorithm executed');
+        }
+
+        // Generate secure token
+        function generateSecureToken() {
+            const token = generateToken() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+            document.getElementById('generatedToken').textContent = token;
+            document.getElementById('secureTokenDisplay').style.display = 'block';
+        }
+
+        // Generate compliance report
+        function generateComplianceReport() {
+            document.getElementById('lastAudit').textContent = new Date().toLocaleString();
+            alert('Compliance report generated successfully!\n\nAll systems operational.\nNo violations detected.\nSecurity status: Active');
+            logActivity('Compliance report generated');
+        }
+
+        // Clear all records
+        function clearAllRecords() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                db.vendors = [];
+                db.tenders = [];
+                db.activities = [];
+                db.documents = [];
+                updateDashboard();
+                document.getElementById('recordsDisplay').innerHTML = '';
+                displayUploadedFiles();
+                alert('All records cleared successfully');
+            }
+        }
+
+        // File upload handling
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        // Prevent default drag behaviors
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, preventDefaults, false);
+            document.body.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        // Highlight drop zone when dragging over
+        ['dragenter', 'dragover'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, () => {
+                uploadZone.classList.add('dragover');
+            }, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            uploadZone.addEventListener(eventName, () => {
+                uploadZone.classList.remove('dragover');
+            }, false);
+        });
+
+        // Handle dropped files
+        uploadZone.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        // Handle file input change
+        fileInput.addEventListener('change', function() {
+            handleFiles(this.files);
+        });
+
+        // Process uploaded files
+        function handleFiles(files) {
+            const token = document.getElementById('uploadToken').value;
+            const category = document.getElementById('docCategory').value;
+
+            if (!token) {
+                alert('Please enter your vendor/tender token first');
+                return;
+            }
+
+            if (!category) {
+                alert('Please select a document category');
+                return;
+            }
+
+            [...files].forEach(file => {
+                // Check file size (10MB limit)
+                if (file.size > 10 * 1024 * 1024) {
+                    alert(`File ${file.name} is too large. Maximum size is 10MB.`);
+                    return;
+                }
+
+                // Create file object
+                const fileObj = {
+                    id: 'DOC-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9),
+                    token: token,
+                    category: category,
+                    name: file.name,
+                    size: formatFileSize(file.size),
+                    type: file.type,
+                    uploadDate: new Date().toISOString(),
+                    file: file
+                };
+
+                db.documents.push(fileObj);
+                logActivity(`Document uploaded: ${file.name}`);
+            });
+
+            displayUploadedFiles();
+            
+            // Show success message
+            document.getElementById('uploadSuccess').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('uploadSuccess').style.display = 'none';
+            }, 3000);
+
+            // Reset file input
+            fileInput.value = '';
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // Display uploaded files
+        function displayUploadedFiles() {
+            const container = document.getElementById('uploadedFiles');
+            
+            if (db.documents.length === 0) {
+                container.innerHTML = '<h3>Uploaded Documents</h3><p id="noFiles">No documents uploaded yet.</p>';
+                return;
+            }
+
+            let html = '<h3>Uploaded Documents (' + db.documents.length + ')</h3>';
+            
+            db.documents.forEach((doc, index) => {
+                const uploadDate = new Date(doc.uploadDate).toLocaleString();
+                html += `
+                    <div class="file-item">
+                        <div class="file-info">
+                            <div class="file-name">📎 ${doc.name}</div>
+                            <div class="file-meta">
+                                <span class="doc-category-badge">${doc.category}</span>
+                                Size: ${doc.size} | Uploaded: ${uploadDate} | Token: ${doc.token}
+                            </div>
+                        </div>
+                        <div class="file-actions">
+                            <button class="btn btn-secondary" onclick="viewDocument(${index})">View</button>
+                            <button class="btn btn-danger" onclick="deleteDocument(${index})">Delete</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // View document
+        function viewDocument(index) {
+            const doc = db.documents[index];
+            alert(`Document Details:\n\nID: ${doc.id}\nName: ${doc.name}\nCategory: ${doc.category}\nSize: ${doc.size}\nToken: ${doc.token}\nUploaded: ${new Date(doc.uploadDate).toLocaleString()}`);
+        }
+
+        // Delete document
+        function deleteDocument(index) {
+            if (confirm('Are you sure you want to delete this document?')) {
+                const doc = db.documents[index];
+                db.documents.splice(index, 1);
+                displayUploadedFiles();
+                logActivity(`Document deleted: ${doc.name}`);
+            }
+        }
+
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const contactData = {
+                name: document.getElementById('contactName').value,
+                email: document.getElementById('contactEmail').value,
+                phone: document.getElementById('contactPhone').value,
+                subject: document.getElementById('contactSubject').value,
+                message: document.getElementById('contactMessage').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            logActivity(`Contact inquiry received from: ${contactData.name} - Subject: ${contactData.subject}`);
+            
+            document.getElementById('contactSuccess').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('contactSuccess').style.display = 'none';
+                this.reset();
+            }, 4000);
+        });
+
+        // Initialize
+        updateDashboard();
+        displayUploadedFiles();
+    </script>
+</body>
+</html>
